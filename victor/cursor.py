@@ -8,7 +8,10 @@ class Cursor(pyglet.sprite.Sprite):
 
         super(Cursor, self).__init__(image, x=x, y=y, batch=batch)
 
-    def get_position(self): return (self.x, self.y);
-    def set_position(self, p): self.x, self.y = p;
+    def get_position(self):
+        return (self.x, self.y);
+
+    def set_position(self, p):
+        self.x, self.y = p;
 
     position = property(get_position, set_position);

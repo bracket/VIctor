@@ -12,7 +12,7 @@ from victor.cursor import Cursor
 from victor.keystroke import Keystrokes
 from victor.movement_grid import MovementGrid
 
-from victor.command import CommandException, register_ex_command, run_ex_command
+from .command import CommandError, register_ex_command, run_ex_command
 
 from victor.path_group import PathGroup
 from victor.path import Path
@@ -79,8 +79,10 @@ class VIctorApp(pyglet.window.Window):
         self.set_mode(vmode.EX)
 
     def run_command(self):
-        try: run_ex_command(self.command_area.text)
-        except CommandException as e: sys.stderr.write('%s\n' % str(e))
+        try:
+            run_ex_command(self.command_area.text)
+        except CommandError as e:
+            sys.stderr.write('%s\n' % str(e))
         self.set_mode(vmode.NORMAL)
 
     def on_timer_fire(self, dt):
@@ -161,11 +163,13 @@ class VIctorApp(pyglet.window.Window):
             print(key, value)
 
     def set_option(self, *args):
-        if len(args) < 2: raise CommandException("No option specified")
+        if len(args) < 2:
+            raise CommandError("No option specified")
 
         option = args[0]
         if option == "color":
-            if len(args) != 5: raise CommandException("color must have 4 arguments")
+            if len(args) != 5:
+                raise CommandError("color must have 4 arguments")
             self.options["color"] = tuple(map(int, args[1:]))
         elif option == "gridcolor":
             pass

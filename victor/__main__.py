@@ -1,6 +1,6 @@
 import pyglet
 
-from victor.app import VIctorApp
+from .app import VIctorApp
 
 pyglet.resource.path = [ 'resource' ]
 window = VIctorApp()

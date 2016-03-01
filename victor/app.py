@@ -96,7 +96,8 @@ class VIctorApp(pyglet.window.Window):
         register_ex_command('line', self.draw_line)
         register_ex_command('marks', self.show_marks)
         register_ex_command('set', self.set_option)
-        register_ex_command('here', self.move_square)
+        register_ex_command('quad', self.add_quad)
+        register_ex_command('draw', self.reset_image)
 
 
     def set_default_options(self):
@@ -203,6 +204,28 @@ class VIctorApp(pyglet.window.Window):
             self.batch.add(2, pyglet.gl.GL_LINES, None,
                 ('v2i', (start[0], start[1], end[0], end[1])),
                 ('c4B', tuple(chain(self.options["color"], self.options["color"]))))
+
+
+    def add_quad(self, *args):
+        if len(args) != 4:
+            self.error("quad requires four arguments", args)
+        else:
+            from sweatervest import MicropolygonMesh
+
+            top_left = self.marks[args[0]]
+            top_right = self.marks[args[1]]
+            bottom_right = self.marks[args[2]]
+            bottom_left = self.marks[args[3]]
+
+            mesh = MicropolygonMesh({
+                'vertices' : [
+                    [ bottom_left, bottom_right ],
+                    [ top_left, top_right ],
+                ],
+                'color' : '#7f0000',
+            })
+
+            self.scene.data['top'].children.append(mesh)
 
 
     def show_marks(self, *args):

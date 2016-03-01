@@ -1,3 +1,4 @@
+import sys
 import unittest
 import pyglet.window.key as pkey
 from mock import patch

@@ -11,7 +11,10 @@ class Keystrokes(object):
         height = font.ascent - font.descent
 
         self.layout = pyglet.text.layout.IncrementalTextLayout(
-            self.document, width, height, multiline=False, batch=batch)
+            self.document,
+            width, height,
+            multiline=False, batch=batch
+        )
 
         self.layout.x = x
         self.layout.y = y
@@ -35,13 +38,15 @@ class Keystrokes(object):
         else:
             self.document.text += text
 
+
     def set_clear_time(self, time):
         self.is_clear_pending = True
         self.clear_time = time + self.clear_delay
+
 
     def clear_text(self, time=None):
         if time is None:
             self.document.text = ""
         else:
-            if time >= self.clear_time and self.is_clear_pending: self.document.text = ""
-
+            if time >= self.clear_time and self.is_clear_pending:
+                self.document.text = ""

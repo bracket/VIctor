@@ -35,7 +35,7 @@ class VIctorApp(pyglet.window.Window):
         super(VIctorApp, self).__init__(
             self.window_shape[0],
             self.window_shape[1],
-            caption="victor"
+            caption="victor",
         )
 
         self.set_default_options()
@@ -205,7 +205,6 @@ class VIctorApp(pyglet.window.Window):
                 ('v2i', (start[0], start[1], end[0], end[1])),
                 ('c4B', tuple(chain(self.options["color"], self.options["color"]))))
 
-
     def add_quad(self, *args):
         if len(args) != 4:
             self.error("quad requires four arguments", args)
@@ -226,7 +225,6 @@ class VIctorApp(pyglet.window.Window):
             })
 
             self.scene.data['top'].children.append(mesh)
-
 
     def show_marks(self, *args):
         for key, value in sorted(self.marks.items()):

@@ -38,8 +38,22 @@ class QTVictorApplication(QApplication):
         window.setGeometry(300, 300, 512 + 150, 512)
         window.setWindowTitle('victor')
 
-        size_policy = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-        canvas = QLabel('Canvas', window)
+        # canvas = QLabel('Canvas', window)
+
+        # canvas_policy = QSizePolicy(    
+        #     QSizePolicy.MinimumExpanding,
+        #     QSizePolicy.MinimumExpanding,
+        # )
+
+        # canvas.setSizePolicy(canvas_policy)
+        # canvas.setFrameStyle(QFrame.Box | QFrame.Plain)
+        # canvas.setLineWidth(1)
+        # canvas.setMinimumWidth(512)
+        # canvas.setMinimumHeight(512)
+
+        gl_window = TestWindow(self)
+
+        canvas = QWidget.createWindowContainer(gl_window)
 
         canvas_policy = QSizePolicy(    
             QSizePolicy.MinimumExpanding,
@@ -47,10 +61,11 @@ class QTVictorApplication(QApplication):
         )
 
         canvas.setSizePolicy(canvas_policy)
-        canvas.setFrameStyle(QFrame.Box | QFrame.Plain)
-        canvas.setLineWidth(1)
+        # canvas.setFrameStyle(QFrame.Box | QFrame.Plain)
+        # canvas.setLineWidth(1)
         canvas.setMinimumWidth(512)
         canvas.setMinimumHeight(512)
+        canvas.setFocusPolicy()
 
         info_policy = QSizePolicy(
             QSizePolicy.Fixed,
@@ -91,7 +106,42 @@ class QTVictorGLWindow(QWindow):
 
 
     def initialize(self):
-        pass
+        if self.program:
+            return
+
+        self.program = QOpenGLShaderProgram(self)
+
+        self.program.addShaderFromSourceCode(
+            QOpenGLShader.Vertex,
+            r'''
+                attribute highp vec4 posAttr;
+                attribute lowp  vec4 colAttr;
+                varying   lowp  vec4 col;
+                uniform   highp mat4 matrix;
+
+                void main() {
+                    col = colAttr;
+                    gl_Position = matrix * posAttr;
+                }
+            '''
+        )
+
+        self.program.addShaderFromSourceCode(
+            QOpenGLShader.Fragment,
+            r'''
+                varying lowp vec4 col;
+
+                void main() {
+                    gl_FragColor = col;
+                }
+            '''
+        )
+
+        self.program.link()
+
+        self.posAttr = self.program.attributeLocation('posAttr')
+        self.colAttr = self.program.attributeLocation('colAttr')
+        self.matrixUniform = self.program.uniformLocation('matrix')
 
 
     def render_later(self):

@@ -26,7 +26,11 @@ from victor.path import Path
 
 import victor.normal_dispatcher as vnd
 
-DATA_PATH = os.path.abspath(os.path.join(os.path.split(__file__)[0], 'data'))
+import pathlib
+
+FILE = Path(__file__).absolute()
+HERE = FILE.parent
+DATA = HERE / 'data'
 
 class VIctorApp(pyglet.window.Window):
     def __init__(self, *args, **kwargs):
@@ -298,7 +302,7 @@ class VIctorApp(pyglet.window.Window):
         if scene is not None:
             return scene
 
-        scene_path = os.path.join(DATA_PATH, 'blank_scene.yaml')
+        scene_path = DATA / 'blank_scene.yaml'
         scene = parse_scene(scene_path)
         attrs['scene'] = scene
 

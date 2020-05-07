@@ -4,7 +4,7 @@ __all__ = [
     'run_ex_command',
 ];
 
-from .Exceptions import CommandError
+from exceptions import CommandError
 
 ex_commands = { };
 
@@ -12,6 +12,7 @@ def run_ex_command(command_line):
     tokens = command_line[1:].split();
 
     f = ex_commands.get(tokens[0], None);
+
     if f is None:
         raise CommandError('unable to find command {}'.format(tokens[0]));
 
